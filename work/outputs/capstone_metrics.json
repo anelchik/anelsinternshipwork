@@ -1,0 +1,107 @@
+{
+  "rows": 30000,
+  "clients": 32,
+  "overall_down_rate": 0.5420666666666667,
+  "split": {
+    "train_rows": 22885,
+    "test_rows": 7115,
+    "train_clients": 24,
+    "test_clients": 8,
+    "client_overlap": 0,
+    "test_base_rate": 0.516514406184118
+  },
+  "comparison": [
+    {
+      "method": "Random Forest",
+      "average_precision": 0.6078820697367817,
+      "roc_auc": 0.6226933238411644,
+      "precision_at_20": 0.6,
+      "precision_at_50": 0.66
+    },
+    {
+      "method": "Logistic Regression",
+      "average_precision": 0.5963458376224777,
+      "roc_auc": 0.5993410852713178,
+      "precision_at_20": 0.95,
+      "precision_at_50": 0.68
+    },
+    {
+      "method": "Week-4 baseline",
+      "average_precision": 0.5412847764716435,
+      "roc_auc": 0.5301765938933712,
+      "precision_at_20": 0.7,
+      "precision_at_50": 0.74
+    }
+  ],
+  "random_row_audit": [
+    {
+      "validation": "Random row split",
+      "average_precision": 0.8066619991374044,
+      "roc_auc": 0.7931859108984103
+    },
+    {
+      "validation": "Client-grouped split",
+      "average_precision": 0.6078820697367817,
+      "roc_auc": 0.6226933238411644
+    }
+  ],
+  "top_features": [
+    {
+      "feature": "days_with_impressions",
+      "mean_AP_drop": 0.02478268188366084,
+      "std_AP_drop": 0.0028446652447899554
+    },
+    {
+      "feature": "clicks_last_30d",
+      "mean_AP_drop": 0.020811698142731407,
+      "std_AP_drop": 0.0013023290101280293
+    },
+    {
+      "feature": "avg_position",
+      "mean_AP_drop": 0.010424528429341495,
+      "std_AP_drop": 0.0013108155715323684
+    },
+    {
+      "feature": "impressions_90d",
+      "mean_AP_drop": 0.007965088864396818,
+      "std_AP_drop": 0.001272065884919797
+    },
+    {
+      "feature": "sessions_last_30d",
+      "mean_AP_drop": 0.0039005437157699774,
+      "std_AP_drop": 0.0007579761037456529
+    },
+    {
+      "feature": "position_tier",
+      "mean_AP_drop": 0.003597351804725557,
+      "std_AP_drop": 0.0009904212914399778
+    },
+    {
+      "feature": "impression_tier",
+      "mean_AP_drop": 0.002452801734892751,
+      "std_AP_drop": 0.0004765787355200852
+    },
+    {
+      "feature": "scroll_rate",
+      "mean_AP_drop": 0.0018606751802140442,
+      "std_AP_drop": 0.0004519080209173874
+    },
+    {
+      "feature": "sessions_prev_30d",
+      "mean_AP_drop": 0.0015926110806832928,
+      "std_AP_drop": 0.0006889989902640062
+    },
+    {
+      "feature": "ctr",
+      "mean_AP_drop": 0.0015771646763591107,
+      "std_AP_drop": 0.0005488561390157264
+    }
+  ],
+  "queue_action_counts": {
+    "SERP_SNIPPET_REVIEW": 132,
+    "CONTENT_INTENT_REVIEW": 66,
+    "MANUAL_DIAGNOSIS": 1,
+    "REFRESH_REVIEW": 1
+  },
+  "claim": "directional decision-support for human review; not causal or autonomous"
+}

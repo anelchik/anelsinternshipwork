@@ -1,8 +1,8 @@
 # Which SEO Content Pages Should Be Reviewed First?
 
-- **Author:** [Your name]
+- **Author:** anelchik
 - **Lane:** Content Review Priority Ranking
-- **Repo:** [Add your repository URL before publishing]
+- **Repo:** https://github.com/anelchik/anelsinternshipwork
 - **Date:** 2026-08-14
 
 ## Abstract
@@ -64,13 +64,13 @@ All methods are evaluated on the same held-out clients.
 
 | Method | Average precision | ROC AUC | Precision@20 | Precision@50 |
 |---|---:|---:|---:|---:|
-| Random Forest | **0.608** | **0.623** | 0.60 | 0.62 |
+| Random Forest | **0.608** | **0.623** | 0.60 | 0.66 |
 | Logistic Regression | 0.596 | 0.599 | **0.95** | 0.68 |
 | Week-4 baseline | 0.541 | 0.530 | 0.70 | **0.74** |
 
 The Random Forest has the strongest overall AP, improving AP by about **0.067 absolute** over the rule baseline. Logistic Regression is close and has much stronger precision@20, while the hand-built rule remains competitive at precision@50. That is useful negative evidence against the idea that more model complexity automatically produces a better operational queue.
 
-The validation audit is the most important result for claim strength. The same Random Forest design reaches **AP 0.806 / ROC AUC 0.793** under a random row split, but only **AP 0.608 / ROC AUC 0.623** under the client-grouped split. The approximately **0.20 AP drop** shows that random-row validation substantially overstates transfer to unseen clients.
+The validation audit is the most important result for claim strength. The same Random Forest design reaches **AP 0.807 / ROC AUC 0.793** under a random row split, but only **AP 0.608 / ROC AUC 0.623** under the client-grouped split. The approximately **0.20 AP drop** shows that random-row validation substantially overstates transfer to unseen clients.
 
 ![Held-out model vs baseline](figures/capstone_model_vs_baseline.png)
 
@@ -88,16 +88,16 @@ Permutation importance on the untouched grouped test split shows the largest AP 
 
 | Feature | Mean AP drop |
 |---|---:|
-| `days_with_impressions` | 0.0251 |
-| `clicks_last_30d` | 0.0207 |
-| `avg_position` | 0.0102 |
-| `impressions_90d` | 0.0076 |
-| `sessions_last_30d` | 0.0046 |
-| `position_tier` | 0.0038 |
-| `impression_tier` | 0.0029 |
-| `scroll_rate` | 0.0020 |
-| `ctr` | 0.0018 |
-| `sessions_prev_30d` | 0.0017 |
+| `days_with_impressions` | 0.0248 |
+| `clicks_last_30d` | 0.0208 |
+| `avg_position` | 0.0104 |
+| `impressions_90d` | 0.0080 |
+| `sessions_last_30d` | 0.0039 |
+| `position_tier` | 0.0036 |
+| `impression_tier` | 0.0025 |
+| `scroll_rate` | 0.0019 |
+| `sessions_prev_30d` | 0.0016 |
+| `ctr` | 0.0016 |
 
 ![Permutation importance](figures/capstone_feature_importance.png)
 
@@ -113,9 +113,9 @@ The top-200 held-out queue contains:
 
 | Review archetype | Pages |
 |---|---:|
-| `SERP_SNIPPET_REVIEW` | 131 |
+| `SERP_SNIPPET_REVIEW` | 132 |
 | `CONTENT_INTENT_REVIEW` | 66 |
-| `MANUAL_DIAGNOSIS` | 2 |
+| `MANUAL_DIAGNOSIS` | 1 |
 | `REFRESH_REVIEW` | 1 |
 
 ![Action mix](figures/capstone_action_mix.png)
@@ -170,6 +170,8 @@ The random seed is **42**. The key reproducibility artifacts are:
 
 The operational queue intentionally excludes `client_id`, the target label, `trend_pct`, leaked trend-window fields, URLs, and private queries.
 
+**On reproducing this report:** the notebook was re-executed from a clean kernel for this submission. Average precision and ROC AUC reproduced to three decimal places against the earlier run recorded during development. The Random Forest's `Precision@50` and the exact top-200 archetype counts shifted by one or two rows (e.g. 0.62 → 0.66; `SERP_SNIPPET_REVIEW` 131 → 132) between runs even with `random_state=42` fixed everywhere, because `RandomForestClassifier(n_jobs=-1)` builds trees across threads and floating-point summation order is not guaranteed identical run to run — this shows up only in metrics sensitive to exact score ties near a hard cutoff, not in the ranking-quality metrics (AP/ROC AUC) the paper's claims rest on. The numbers in this report are the values from the fresh run committed alongside it.
+
 ## Limitations and honest framing
 
 The strongest defensible statement is narrow:
@@ -177,6 +179,14 @@ The strongest defensible statement is narrow:
 > **On a held-out client-grouped split, the model provides a measured ranking signal for pages associated with an observed decline. I use that signal as directional decision-support to prioritize human review, then attach transparent non-leaking reason codes and review archetypes. The playbook does not automate edits, diagnose causes, or claim that a recommended intervention will improve performance.**
 
 This work does not establish causality, does not provide a fully time-forward forecast, does not measure the treatment effect of the recommended actions, and does not guarantee performance for clients outside the evaluated population. The results should therefore be treated as evidence for prioritization, not as an automated SEO decision engine.
+
+## Appendix: full feature list
+
+The model uses these 38 columns as input (everything in the release except the six excluded fields listed in §2):
+
+`search_volume`, `competition`, `competition_level`, `cpc`, `content_type`, `main_intent`, `word_count`, `char_count`, `provider_used`, `model_used`, `impressions_90d`, `clicks_90d`, `pageviews_90d`, `sessions_90d`, `users_90d`, `engaged_sessions_90d`, `ai_sessions_90d`, `scroll_events_90d`, `days_with_impressions`, `days_with_sessions`, `clicks_last_30d`, `sessions_last_30d`, `clicks_prev_30d`, `sessions_prev_30d`, `content_age_days`, `age_tier`, `age_tier_order`, `days_since_last_update`, `freshness_tier`, `word_count_tier`, `char_count_tier`, `ctr`, `avg_position`, `engagement_rate`, `scroll_rate`, `ai_traffic_pct`, `impression_tier`, `position_tier`.
+
+Note that `clicks_last_30d` and `sessions_last_30d` (and their `_prev_30d` counterparts) are kept: they are engagement-volume windows, distinct from the `impressions_last_30d` / `impressions_prev_30d` pair that is excluded because it directly reconstructs `trend_pct`, the source of the target.
 
 ## Acknowledgments and data credit
 

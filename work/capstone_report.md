@@ -1,6 +1,6 @@
 # Which SEO Content Pages Should Be Reviewed First?
 
-- **Author:** anelchik
+- **Author:** Anel Murat
 - **Lane:** Content Review Priority Ranking
 - **Repo:** https://github.com/anelchik/anelsinternshipwork
 - **Date:** 2026-08-14

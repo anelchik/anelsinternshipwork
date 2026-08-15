@@ -190,4 +190,4 @@ Note that `clicks_last_30d` and `sessions_last_30d` (and their `_prev_30d` count
 
 ## Acknowledgments and data credit
 
-This capstone uses the anonymized FlyRank internship content-refresh dataset supplied for the project and builds on the earlier baseline, model, validation-audit, and action-playbook assignments in the same repository. No private client names, URLs, or raw search queries are reproduced in this report.
+Built on the [FlyRank](https://flyrank.ai/) ML Internship dataset. This capstone uses the anonymized FlyRank internship content-refresh dataset supplied for the project and builds on the earlier baseline, model, validation-audit, and action-playbook assignments in the same repository. No private client names, URLs, or raw search queries are reproduced in this report.
